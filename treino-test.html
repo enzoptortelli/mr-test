@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <style>
+            #FORM-DISPLAY {
+                display: none;
+                flex-direction: column;
+                justify-content: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <div class="title">
+                Treino
+            </div>
+            <div id="NUMBER-DISPLAY" class="number-display">
+                
+            </div>
+    
+            <button id="BUTTON" class="fake-button align-end last-button">
+                    Iniciar
+            </button>
+
+            
+
+            <div id="FORM-DISPLAY">
+                <div class="regular-text">
+                    Digite os números na ordem em que foram apresentados:
+                </div>
+    
+                <form id="trial-form" action="treino-resultado.html" method="post">
+                     <input class="trial-input" id="trial-input" name="trial-input" type="text" spellcheck="false" required autocomplete="off">
+                </form>
+    
+                <button class="fake-button align-end last-button" type="submit" form="trial-form">
+                    Avançar
+                </button>
+            </div>
+            
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
