@@ -12,9 +12,8 @@
     </head>
     <body>
         <div class="main">
-            <div class="title">
-                Treino
-            </div>
+            <h1 class="title">Treinamento <span id="TEST-NUMBER"></span></h1>
+            
             <div id="NUMBER-DISPLAY" class="number-display">
                 
             </div>
@@ -26,20 +25,24 @@
             
 
             <div id="FORM-DISPLAY">
+                <div class="regular-text"><p>Tempo restante: <span id="TEMPO-RESTANTE"></span>s</p></div>
                 <div class="regular-text">
-                    Digite os números na ordem em que foram apresentados:
+                    <p id="INPUT-LABEL">Digite os números na ordem em que foram apresentados:</p>
                 </div>
     
-                <form id="trial-form" action="treino-resultado.html" method="post">
-                     <input class="trial-input" id="trial-input" name="trial-input" type="text" spellcheck="false" required autocomplete="off">
+                <form id="trial-form">
+                     <input class="trial-input" id="FORM-INPUT" name="trial-input" type="text" spellcheck="false" required autocomplete="off">
                 </form>
     
-                <button class="fake-button align-end last-button" type="submit" form="trial-form">
+                <button id="FORM-BUTTON" class="fake-button align-end last-button">
                     Avançar
                 </button>
             </div>
             
         </div>
-        <script src="script.js"></script>
     </body>
+    <figure>
+        <audio loop src="audio/classical-piano-music-carmen-239495.mp3"></audio>
+    </figure>
+    <script src="teste-mr.js"></script>
 </html>

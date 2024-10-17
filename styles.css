@@ -12,9 +12,10 @@ body {
 }
 
 
+
 .main {
     padding: 50px 50px 0px 50px;
-    max-width: 900px;
+    width: 900px;
 
     display: flex;
     flex-direction: column;
@@ -41,13 +42,12 @@ body {
 }
 
 .title {
-    width: 900px;
-    align-self: flex-start;
+    font-size: 1.3em;
+    margin-bottom: 50px;
+}
 
-    font-size: 30px;
-    font-weight: bold;
-
-    margin-bottom: 100px;
+.regular-text p {
+    margin-bottom: 1em;
 }
 
 .fake-button {
@@ -72,10 +72,13 @@ button.fake-button:hover {
 }
 
 .number-display {
-    padding: 90px;
-    min-width: 270px;
-    min-height: 380px;
-    width: fit-content;
+    width: 270px;
+    height: 380px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     font-size: 140px;
     border-style: solid;
     border-width: 5px;
