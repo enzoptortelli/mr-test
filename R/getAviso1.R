@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+getAviso1 <- function() {
+  page <- '
+  <!DOCTYPE html>
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="/static/styles/styles.css">
@@ -15,7 +17,7 @@
                 <p>Os dígitos começarão a aparecer depois de 10 segundos do início de cada teste.</p>
             </div>
 
-            <a class="fake-button align-end last-button" href="teste-mr.html">
+            <a class="fake-button align-end last-button" href="/teste-mr">
                 Iniciar treinamento
             </a>
 
@@ -25,3 +27,6 @@
         </div>
     </body>
 </html>
+  '
+  return(page)
+}

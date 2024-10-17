@@ -1,8 +1,32 @@
 
-const seqs = ['1234', '5678', '09123'];
-const startDelay = 3000;
-const numberDelay = 1000;
-const inputTimer = 7;
+const seqs = document.cookie.split('; ').filter(c => c.startsWith('mrTeste-')).map((seq) => {
+    return seq.split('=')[1]
+  });
+
+startDelay = + document.cookie.split('; ').filter(c => c.startsWith('DELAY_COMECAR')).map((seq) => {
+    return seq.split('=')[1]
+  })[0];
+
+const numberDelay = + document.cookie.split('; ').filter(c => c.startsWith('TEMPO_DIGITO')).map((seq) => {
+    return seq.split('=')[1]
+  })[0];
+
+const inputTimer = + document.cookie.split('; ').filter(c => c.startsWith('TIMER_RESPOSTA')).map((seq) => {
+    return seq.split('=')[1]
+  })[0];
+
+const delayBetweenNumber = + document.cookie.split('; ').filter(c => c.startsWith('TEMPO_ENTRE_DIGITOS')).map((seq) => {
+    return seq.split('=')[1]
+  })[0];
+
+
+const delayBetweenTests = + document.cookie.split('; ').filter(c => c.startsWith('DELAY_ENTRE_TESTES')).map((seq) => {
+    return seq.split('=')[1]
+  })[0];
+
+  
+
+
 
 let seqCount = 0
 
@@ -26,6 +50,7 @@ startButton.addEventListener('click', function(event) {
     this.style.display = 'none';
     setTimers(seqs[seqCount]);
     seqCount++;
+    startDelay = delayBetweenTests;
 })
 
 function showForm() {
@@ -46,19 +71,20 @@ function showForm() {
 
 function setTimers(seq) {
     for(let i = 0; i <= seq.length; i++) {
-        setTimeout(() => {displayNumber.innerHTML = seq[i]}, startDelay + numberDelay*i);
+        setTimeout(() => {displayNumber.innerHTML = seq[i]}, startDelay + numberDelay*i + delayBetweenNumber*i);
+        setTimeout(() => {displayNumber.innerHTML = ''}, startDelay + numberDelay*(i+1) + delayBetweenNumber*i)
     } 
     
     setTimeout(() => {
         showForm();
-    }, startDelay + numberDelay*seq.length);
+    }, startDelay + numberDelay*seq.length + delayBetweenNumber*seq.length);
     
 }
 
 
 formButton.addEventListener('click', function(event) {
     clearInterval(inputInterval);
-    document.cookie = 'mrTest-' + seqCount + '=' + formInput.value + ';';
+    document.cookie = 'mrResponse-' + seqCount + '=' + formInput.value + ';';
     formInput.value = '';
 
     if(seqCount == seqs.length) {
