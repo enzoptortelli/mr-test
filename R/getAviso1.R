@@ -1,5 +1,5 @@
-getAviso1 <- function() {
-  page <- '
+getAviso1 <- function(delay_comecar, musica_path) {
+  page <- glue('
   <!DOCTYPE html>
 <html>
     <head>
@@ -11,22 +11,20 @@ getAviso1 <- function() {
 
             <div class="regular-text">
                 <p>Durante os testes, haverá uma música tocando.</p>
-                <p>Ajuste o volume da música tal que fique alto, mas sem que seja desconfortável. Depois desse ponto, não altere mais o volume da música.</p>
-                <p>A dica que damos para se relembrar mais facilmente dos dígitos é memorizá-los de 3 em 3. Dito isso, você pode escolher o método que achar mais adequado.</p>
-                <p>Essa será a música tocada durante o treinamento, mas a música tocada durantes os testes será outra.</p>
-                <p>Os dígitos começarão a aparecer depois de 10 segundos do início de cada teste.</p>
+                <p>Ajuste o volume da música tal que fique alto, mas sem que seja desconfortável. Depois desse ponto, evite alterar o volume da música.</p>
+                <p>A música que você ouve agora será tocada durante o treinamento, mas a música tocada durantes os testes será outra.</p>
             </div>
 
-            <a class="fake-button align-end last-button" href="/teste-mr">
+            <a class="fake-button align-end last-button" href="/teste-mr-treinamento">
                 Iniciar treinamento
             </a>
 
             <figure>
-                <audio autoplay loop src="audio/classical-piano-music-carmen-239495.mp3"></audio>
+                <audio autoplay loop src="/static/music/volume_test/{musica_path}"></audio>
             </figure>
         </div>
     </body>
 </html>
-  '
+  ')
   return(page)
 }

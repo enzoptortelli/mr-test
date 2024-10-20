@@ -1,5 +1,5 @@
 
-const seqs = document.cookie.split('; ').filter(c => c.startsWith('mrTeste-')).map((seq) => {
+const seqs = document.cookie.split('; ').filter(c => c.startsWith('mrTeste_')).map((seq) => {
     return seq.split('=')[1]
   });
 
@@ -23,6 +23,10 @@ const delayBetweenNumber = + document.cookie.split('; ').filter(c => c.startsWit
 const delayBetweenTests = + document.cookie.split('; ').filter(c => c.startsWith('DELAY_ENTRE_TESTES')).map((seq) => {
     return seq.split('=')[1]
   })[0];
+
+const isPractice = document.cookie.split('; ').filter(c => c.startsWith('isPractice')).map((seq) => {
+  return seq.split('=')[1]
+})[0] == true;
 
   
 
@@ -84,12 +88,13 @@ function setTimers(seq) {
 
 formButton.addEventListener('click', function(event) {
     clearInterval(inputInterval);
-    document.cookie = 'mrResponse-' + seqCount + '=' + formInput.value + ';';
+    document.cookie = 'mrResponse_' + seqCount + '=' + formInput.value + ';';
     formInput.value = '';
 
     if(seqCount == seqs.length) {
-        window.location.href = "pontuacao.html";
-        return;
+      if(isPractice) window.location.href = "/pontuacao-treinamento";
+      else window.location.href = "/teste-personalidade";       
+      return;
     }
 
     inputLabel.innerHTML = 'Digite os números na ordem em que foram apresentados:';
@@ -104,6 +109,14 @@ formButton.addEventListener('click', function(event) {
     setTimers(seqs[seqCount]);
     seqCount++;
 })
+
+formInput.addEventListener("keyup", function(event) {
+    
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      formButton.click();
+    }
+});
 
 
 

@@ -104,7 +104,7 @@ form {
     outline: none;
 }
 
-.radio-form fieldset {
+.radio-form fieldset, .dropdown-form {
     display: flex;
     flex-direction: column;
 

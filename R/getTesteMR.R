@@ -1,5 +1,10 @@
-getTesteMR <- function() {
-  page <- '
+getTesteMR <- function(treinamento, musica) {
+  titulo <- ifelse(treinamento, 'Treinamento', 'Teste')
+  musica <- ifelse(musica == 'controle',
+                   '',
+                   glue('<audio loop src="/static/music/{ifelse(treinamento, "volume_test/", "mr_test/")}{musica}"></audio>'))
+
+  page <- paste0('
   <!DOCTYPE html>
 <html>
     <head>
@@ -14,7 +19,7 @@ getTesteMR <- function() {
     </head>
     <body>
         <div class="main">
-            <h1 class="title">Treinamento <span id="TEST-NUMBER"></span></h1>
+            <h1 class="title">', titulo, ' <span id="TEST-NUMBER"></span></h1>
 
             <div id="NUMBER-DISPLAY" class="number-display">
 
@@ -32,9 +37,7 @@ getTesteMR <- function() {
                     <p id="INPUT-LABEL">Digite os números na ordem em que foram apresentados:</p>
                 </div>
 
-                <form id="trial-form">
-                     <input class="trial-input" id="FORM-INPUT" name="trial-input" type="text" spellcheck="false" required autocomplete="off">
-                </form>
+                    <input class="trial-input" id="FORM-INPUT" name="trial-input" type="text" spellcheck="false" required autocomplete="off">
 
                 <button id="FORM-BUTTON" class="fake-button align-end last-button">
                     Avançar
@@ -43,12 +46,11 @@ getTesteMR <- function() {
 
         </div>
     </body>
-    <figure>
-        <audio loop src="audio/classical-piano-music-carmen-239495.mp3"></audio>
-    </figure>
+    <figure>', musica,
+    '</figure>
     <script src="/static/script/teste-mr.js"></script>
 </html>
-  '
+  ')
 
   return(page)
 }

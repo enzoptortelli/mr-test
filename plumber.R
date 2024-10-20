@@ -8,22 +8,47 @@
 #
 
 library(plumber)
+library(glue)
+library(readr)
+library(stringr)
 options("plumber.port" = 5555)
-
-NUM_TESTE <- 10
-NUM_DIGITOS <- 12
-NUM_TESTE_TREINAMENTO <- 3
-TIMER_RESPOSTA <- 30
-TEMPO_DIGITO <- 1.2
-TEMPO_ENTRE_DIGITOS <- 0.5
-DELAY_COMECAR <- 10
-DELAY_ENTRE_TESTES <- 5
-
 
 files.sources = list.files('R')
 sapply(files.sources, function(file) {
   source(paste0('R/', file))
 })
+
+NUM_TESTE <- 2
+NUM_DIGITOS <- 5
+NUM_TESTE_TREINAMENTO <- 2
+TIMER_RESPOSTA <- 30
+TEMPO_DIGITO <- 1
+TEMPO_ENTRE_DIGITOS <- 0.5
+DELAY_COMECAR <- 5
+DELAY_ENTRE_TESTES <- 5
+
+mr_music <- list.files(file.path('static', 'music', 'mr_test'))
+vol_test_music <- list.files(file.path('static', 'music', 'volume_test'))
+
+
+setMrCookies <- function(res, treinamento) {
+  res$setCookie('TIMER_RESPOSTA', TIMER_RESPOSTA)
+  res$setCookie('TEMPO_DIGITO', TEMPO_DIGITO * 1000)
+  res$setCookie('TEMPO_ENTRE_DIGITOS', TEMPO_ENTRE_DIGITOS * 1000)
+  res$setCookie('DELAY_COMECAR', DELAY_COMECAR * 1000)
+  res$setCookie('DELAY_ENTRE_TESTES', DELAY_ENTRE_TESTES * 1000)
+
+  if(treinamento) res$setCookie('isPractice', '1')
+  else res$setCookie('isPractice', '0')
+
+  num_test <- ifelse(treinamento, NUM_TESTE_TREINAMENTO, NUM_TESTE)
+  seqs <- getSeqs(num_test, NUM_DIGITOS)
+
+  lapply(1:nrow(seqs), FUN = function(index) {
+    res$setCookie(paste0('mrTeste_', index), paste0(seqs[index,], collapse = ""))
+  })
+}
+
 
 #* @apiTitle Plumber Example API
 #* @apiDescription Plumber example description.
@@ -31,62 +56,95 @@ sapply(files.sources, function(file) {
 #* @assets ./static /static
 list()
 
-#* Echo back the input
-#* @param msg The message to echo
-#* @get /echo
-function(msg = "") {
-    list(msg = paste0("The message is: '", msg, "'"))
+#* @serializer html
+#* @get /escolha-musica
+function(req, res) {
+  sapply(names(req$cookies), function(cookie) {
+    res$removeCookie(cookie)
+  })
+
+  getEscolhaMusica(mr_music)
+
 }
 
+
 #* @serializer html
-#* @get /introducao
-function() {
+#* @post /introducao
+function(req, res) {
+  musica <- req$body['music_file_name']
+  res$setCookie('music_file_name', musica)
+
   getIntroducao(num_teste = NUM_TESTE,
                 num_digitos = NUM_DIGITOS,
                 timer_resposta = TIMER_RESPOSTA,
-                num_teste_treinamento = NUM_TESTE_TREINAMENTO)
+                num_teste_treinamento = NUM_TESTE_TREINAMENTO,
+                nome_musica = musica)
 }
 
 #* @serializer html
 #* @get /aviso1
 function() {
-  getAviso1()
+  getAviso1(DELAY_COMECAR, vol_test_music)
 }
 
 #* @serializer html
-#* @get /teste-mr
-function(res) {
-  res$setCookie('TIMER_RESPOSTA', TIMER_RESPOSTA)
-  res$setCookie('TEMPO_DIGITO', TEMPO_DIGITO * 1000)
-  res$setCookie('TEMPO_ENTRE_DIGITOS', TEMPO_ENTRE_DIGITOS * 1000)
-  res$setCookie('DELAY_COMECAR', DELAY_COMECAR * 1000)
-  res$setCookie('DELAY_ENTRE_TESTES', DELAY_ENTRE_TESTES * 1000)
-
-  seqs <- getSeqs()
-
-  lapply(1:nrow(seqs), FUN = function(index) {
-    res$setCookie(paste0('mrTeste-', index), paste0(seqs[1,], collapse = ""))
-  })
-
-  getTesteMR()
+#* @get /teste-mr-treinamento
+function(res, req) {
+  setMrCookies(res, treinamento = TRUE)
+  getTesteMR(treinamento = TRUE, musica = vol_test_music)
 }
 
 #* @serializer html
-#* @post /pontuacao
-function() {
-  getPontuacao()
+#* @get /pontuacao-treinamento
+function(req) {
+  respostas <- extractResponseFromCookies(req$cookies)
+  seqs <- extractSequenceFromCookies(req$cookies)
+
+  pontuacao <- calcularPontuacao(respostas, seqs, NUM_DIGITOS)
+  getPontuacao(pontuacao, treinamento = TRUE)
+
 }
 
 #* @serializer html
 #* @get /aviso2
 function() {
-  getAviso2()
+  getAviso2(NUM_TESTE)
+}
+
+#* @serializer html
+#* @get /teste-mr
+function(res, req) {
+  setMrCookies(res, treinamento = FALSE)
+  getTesteMR(treinamento = FALSE, musica = req$cookies['music_file_name'])
 }
 
 #* @serializer html
 #* @get /teste-personalidade
 function() {
   getTestePersonalidade()
+}
+
+#* @serializer html
+#* @post /pontuacao
+function(req) {
+  cookies <- req$cookies
+  respostas <- cookies[names(cookies) %>% str_starts('mrResponse_')]
+  seqs <- cookies[names(cookies) %>% str_starts('mrTeste_')]
+  teste_personalidade <- req$body['extrovert_level'] %>% unlist()
+
+  pontuacao <- calcularPontuacao(respostas, seqs, NUM_DIGITOS)
+
+  id <- sample(1:1000000000, 1)
+
+  print(class(pontuacao[1]))
+
+
+  for(i in 1:length(respostas)) {
+    insertData(id, i, seqs[[i]], respostas[[i]], pontuacao[i], req$cookies['music_file_name'] %>% unlist(), teste_personalidade[1])
+  }
+
+  getPontuacao(pontuacao, treinamento = FALSE)
+
 }
 
 #* @serializer html
