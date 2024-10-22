@@ -7,21 +7,25 @@ insertData <- function(id, id_teste, seq, resposta, pontuacao, musica, personali
     db <- read_csv(data_path,
                    col_types = 'iiccicc',
                    show_col_types = FALSE)
-    db[nrow(db) + 1, ] <- list(id = id,
-                         id_teste = id_teste,
-                         seq = seq,
-                         resposta = resposta,
-                         pontuacao = pontuacao,
-                         musica = musica,
-                         personalidade = personalidade)
+    db <- db %>% add_row(
+      data.frame(
+        id = id,
+        id_teste = id_teste,
+        seq = seq,
+        resposta = resposta,
+        pontuacao = pontuacao,
+        musica = musica,
+        personalidade = personalidade)
+    )
+
   } else {
     db <- data.frame(id = id,
-                 id_teste = id_teste,
-                 seq = seq,
-                 resposta = resposta,
-                 pontuacao = pontuacao,
-                 musica = musica,
-                 personalidade = personalidade)
+                     id_teste = id_teste,
+                     seq = seq,
+                     resposta = resposta,
+                     pontuacao = pontuacao,
+                     musica = musica,
+                     personalidade = personalidade)
   }
 
 

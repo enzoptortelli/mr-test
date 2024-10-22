@@ -11,6 +11,7 @@ library(plumber)
 library(glue)
 library(readr)
 library(stringr)
+library(tibble)
 options("plumber.port" = 5555)
 
 files.sources = list.files('R')
@@ -29,6 +30,9 @@ DELAY_ENTRE_TESTES <- 5
 
 mr_music <- list.files(file.path('static', 'music', 'mr_test'))
 vol_test_music <- list.files(file.path('static', 'music', 'volume_test'))
+if(length(mr_music) == 0) {
+  stop('Coloque as músicas nas pastas indicadas no README')
+}
 
 
 setMrCookies <- function(res, treinamento) {
@@ -91,7 +95,10 @@ function() {
 #* @get /teste-mr-treinamento
 function(res, req) {
   setMrCookies(res, treinamento = TRUE)
-  getTesteMR(treinamento = TRUE, musica = vol_test_music)
+  musica <- ifelse(req$cookies['music_file_name'] %>% unlist() == 'controle',
+                   'controle',
+                   vol_test_music)
+  getTesteMR(treinamento = TRUE, musica = musica)
 }
 
 #* @serializer html
@@ -132,12 +139,11 @@ function(req) {
   seqs <- cookies[names(cookies) %>% str_starts('mrTeste_')]
   teste_personalidade <- req$body['extrovert_level'] %>% unlist()
 
-  pontuacao <- calcularPontuacao(respostas, seqs, NUM_DIGITOS)
+  pontuacao <- calcularPontuacao(extractResponseFromCookies(req$cookies),
+                                 extractSequenceFromCookies(req$cookies),
+                                 NUM_DIGITOS)
 
   id <- sample(1:1000000000, 1)
-
-  print(class(pontuacao[1]))
-
 
   for(i in 1:length(respostas)) {
     insertData(id, i, seqs[[i]], respostas[[i]], pontuacao[i], req$cookies['music_file_name'] %>% unlist(), teste_personalidade[1])

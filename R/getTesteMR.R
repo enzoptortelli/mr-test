@@ -1,8 +1,8 @@
 getTesteMR <- function(treinamento, musica) {
   titulo <- ifelse(treinamento, 'Treinamento', 'Teste')
-  musica <- ifelse(musica == 'controle',
+  musica_path <- ifelse(musica == 'controle',
                    '',
-                   glue('<audio loop src="/static/music/{ifelse(treinamento, "volume_test/", "mr_test/")}{musica}"></audio>'))
+                   paste0(ifelse(treinamento, "volume_test/", "mr_test/"), musica))
 
   page <- paste0('
   <!DOCTYPE html>
@@ -46,8 +46,9 @@ getTesteMR <- function(treinamento, musica) {
 
         </div>
     </body>
-    <figure>', musica,
-    '</figure>
+    <figure>
+        <audio loop src="/static/music/', musica_path, '"></audio>
+    </figure>
     <script src="/static/script/teste-mr.js"></script>
 </html>
   ')

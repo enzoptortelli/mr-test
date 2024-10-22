@@ -88,7 +88,8 @@ function setTimers(seq) {
 
 formButton.addEventListener('click', function(event) {
     clearInterval(inputInterval);
-    document.cookie = 'mrResponse_' + seqCount + '=' + formInput.value + ';';
+    inputValue = formInput.value.match(/\d/g).join('');
+    document.cookie = 'mrResponse_' + seqCount + '=' + inputValue + ';';
     formInput.value = '';
 
     if(seqCount == seqs.length) {
