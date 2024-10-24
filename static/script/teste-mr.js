@@ -60,6 +60,7 @@ startButton.addEventListener('click', function(event) {
 function showForm() {
     displayNumber.style.display = 'none';
     formDisplay.style.display = 'flex';
+    formInput.focus();
     let tempoRestante = inputTimer - 1;
 
     window.inputInterval = setInterval(() => {
@@ -88,7 +89,9 @@ function setTimers(seq) {
 
 formButton.addEventListener('click', function(event) {
     clearInterval(inputInterval);
-    inputValue = formInput.value.match(/\d/g).join('');
+    if(formInput.value.match(/\d/g) != null) {
+      inputValue = formInput.value.match(/\d/g).join('');
+    } else {inputValue = ''}
     document.cookie = 'mrResponse_' + seqCount + '=' + inputValue + ';';
     formInput.value = '';
 
