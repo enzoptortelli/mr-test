@@ -19,13 +19,13 @@ sapply(files.sources, function(file) {
   source(paste0('R/', file))
 })
 
-NUM_TESTE <- 2
-NUM_DIGITOS <- 5
-NUM_TESTE_TREINAMENTO <- 2
-TIMER_RESPOSTA <- 30
+NUM_TESTE <- 10
+NUM_DIGITOS <- 9
+NUM_TESTE_TREINAMENTO <- 3
+TIMER_RESPOSTA <- 20
 TEMPO_DIGITO <- 1
-TEMPO_ENTRE_DIGITOS <- 0.5
-DELAY_COMECAR <- 5
+TEMPO_ENTRE_DIGITOS <- 0.3
+DELAY_COMECAR <- 15
 DELAY_ENTRE_TESTES <- 5
 
 mr_music <- list.files(file.path('static', 'music', 'mr_test'))
