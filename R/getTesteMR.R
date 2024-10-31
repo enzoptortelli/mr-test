@@ -2,7 +2,7 @@ getTesteMR <- function(treinamento, musica) {
   titulo <- ifelse(treinamento, 'Treinamento', 'Teste')
   musica_path <- ifelse(musica == 'controle',
                    '',
-                   paste0(ifelse(treinamento, "volume_test/", "mr_test/"), musica))
+                   paste0("mr_test/", musica))
 
   page <- paste0('
   <!DOCTYPE html>

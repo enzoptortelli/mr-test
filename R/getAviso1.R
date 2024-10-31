@@ -12,7 +12,6 @@ getAviso1 <- function(delay_comecar, musica_path) {
             <div class="regular-text">
                 <p>Durante os testes, haverá uma música tocando.</p>
                 <p>Ajuste o volume da música tal que fique alto, mas sem que seja desconfortável. Depois desse ponto, evite alterar o volume da música.</p>
-                <p>A música que você ouve agora será tocada durante o treinamento, mas a música tocada durantes os testes será outra.</p>
             </div>
 
             <a class="fake-button align-end last-button" href="/teste-mr-treinamento">
@@ -20,7 +19,7 @@ getAviso1 <- function(delay_comecar, musica_path) {
             </a>
 
             <figure>
-                <audio autoplay loop src="/static/music/volume_test/{musica_path}"></audio>
+                <audio autoplay loop src="/static/music/mr_test/{musica_path}"></audio>
             </figure>
         </div>
     </body>

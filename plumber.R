@@ -25,8 +25,8 @@ NUM_TESTE_TREINAMENTO <- 3
 TIMER_RESPOSTA <- 20
 TEMPO_DIGITO <- 1
 TEMPO_ENTRE_DIGITOS <- 0.3
-DELAY_COMECAR <- 15
-DELAY_ENTRE_TESTES <- 5
+DELAY_COMECAR <- 10
+DELAY_ENTRE_TESTES <- 3
 
 mr_music <- list.files(file.path('static', 'music', 'mr_test'))
 vol_test_music <- list.files(file.path('static', 'music', 'volume_test'))
@@ -88,8 +88,9 @@ function(req, res) {
 
 #* @serializer html
 #* @get /aviso1
-function() {
-  getAviso1(DELAY_COMECAR, vol_test_music)
+function(req) {
+  musica <-
+  getAviso1(DELAY_COMECAR, req$cookies['music_file_name'])
 }
 
 #* @serializer html
@@ -99,7 +100,7 @@ function(res, req) {
   musica <- ifelse(req$cookies['music_file_name'] %>% unlist() == 'controle',
                    'controle',
                    vol_test_music)
-  getTesteMR(treinamento = TRUE, musica = musica)
+  getTesteMR(treinamento = TRUE, musica = req$cookies['music_file_name'])
 }
 
 #* @serializer html
