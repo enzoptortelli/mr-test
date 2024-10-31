@@ -99,8 +99,8 @@ function(res, req) {
   setMrCookies(res, treinamento = TRUE)
   musica <- ifelse(req$cookies['music_file_name'] %>% unlist() == 'controle',
                    'controle',
-                   vol_test_music)
-  getTesteMR(treinamento = TRUE, musica = req$cookies['music_file_name'])
+                   req$cookies['music_file_name'])
+  getTesteMR(treinamento = TRUE, musica = musica)
 }
 
 #* @serializer html

@@ -28,8 +28,13 @@ const isPractice = document.cookie.split('; ').filter(c => c.startsWith('isPract
   return seq.split('=')[1]
 })[0] == true;
 
-  
+const music_name = document.cookie.split('; ').filter(c => c.startsWith('music_file_name')).map((seq) => {
+  return seq.split('=')[1]
+})[0];
 
+
+isControle = false;
+if(music_name == 'controle') isControle = true;
 
 
 let seqCount = 0
@@ -50,7 +55,7 @@ tempoElement.innerHTML = inputTimer;
 titleElement.innerHTML = (seqCount + 1) + '/' + seqs.length;
 
 startButton.addEventListener('click', function(event) {
-    audioElement.play();
+    if(!isControle) audioElement.play();
     this.style.display = 'none';
     setTimers(seqs[seqCount]);
     seqCount++;
