@@ -10,7 +10,7 @@ getFinalizacao <- function(num_testes) {
             <h1 class="title">Fim</h1>
 
             <div class="regular-text">
-                <p>Obrigado por participart de nosso estudo!</p>
+                <p>Obrigado por participar de nosso estudo!</p>
             </div>
 
             <a class="fake-button align-end last-button" href="/escolha-musica">
