@@ -62,6 +62,7 @@ list()
 
 #* @serializer html
 #* @get /escolha-musica
+#* @get /
 function(req, res) {
   sapply(names(req$cookies), function(cookie) {
     res$removeCookie(cookie)
